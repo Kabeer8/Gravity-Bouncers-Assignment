@@ -1,64 +1,94 @@
-// Baby Names Data (Top 50 Boy/Girl 2022)
-// Baby Center (babycenter.com)
-// https://www.babycenter.com/baby-names/most-popular/top-baby-names#popularNameList
+let cnv = document.getElementById("my-canvas");
+let ctx = cnv.getContext("2d");
+cnv.height = 600;
+cnv.width = 1500;
+let gravity1 = 15;
+let gravity2 = 15;
+let ballz = [];
+ballz.push(newBall(750, 300, 25,"red",4 ));
+ballz.push(newBall(750, 300, 25, "blue", -4));
 
-// Variables for html elements
-let goBtn = document.getElementById("go-btn");
-let menuSelect = document.getElementById("menu-select");
-let container = document.getElementById("container");
-let nameCountSpan = document.getElementById("name-count");
+(requestAnimationFrame)(draw);
+function draw(){
+    ctx.clearRect(0, 0, cnv.width, cnv.height);
 
-// Initialize Array of Character Objects from json file
-let babyData = [];
-fetch("baby-names-data.json")
-  .then((res) => res.json())
-  .then((data) => (babyData = data));
+    for(i = 0; i < 2; i++){
+        drawBall(ballz[i])
+        animate(ballz[i])
 
-// Event Listener on Go Button
-goBtn.addEventListener("click", goBtnClicked);
-
-// Process Go Button Click
-function goBtnClicked() {
-  // Get Menu Selection
-  let selection = menuSelect.value;
-
-  // Process Menu Selection
-  if (selection === "display-all") {
-    displayAll();
-  } else if (selection === "gender") {
-    searchGender();
-  } else if (selection === "rank") {
-    searchRank();
-  } else if (selection === "starting-letter") {
-    searchStartingLetter();
-  } else if (selection === "length") {
-    searchLength();
-  }
+        if (ballz[i].y >= 595){
+            bounce(ballz[i])
+        }
+        if(gravity1 < 15){
+            gravity1  += 0.25
+        }
+        if(ballz[i].x >= 1490){
+            ballz[i].m = -4
+        }
+        if(ballz[i].x <= 10){
+            ballz[i].m = 4
+        }
+        if(gravity2 < 15){
+            gravity2  += 0.25
+        }
+    }
+    
+requestAnimationFrame(draw);
 }
 
-// Display All Baby Names
-function displayAll() {
-  console.log("Display All");
-  // Confirm data load
-  console.log(babyData);
+function drawBall(ball){
+    x = ball.x
+    y = ball.y
+    r = ball.r
+    color = ball.c
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, 2*Math.PI);
+    ctx.fill();
 }
 
-// Display Names by Gender
-function searchGender() {
-  console.log("Search By Gender");
+function newBall(initX, initY, initR, initC, initM){
+    return{
+        x: initX,
+        y: initY,
+        r: initR,
+        c: initC,
+        m: initM
+        };
 }
 
-// Display Names within a Range of Ranks
-function searchRank() {
-  console.log("Search By Rank");
+function animate(ball){
+    if (ball.c == "red"){
+        ball.y += gravity1;
+    }
+    else if(ball.c == "blue"){
+        ball.y += gravity2;
+    }
+    ball.x += ball.m;
 }
 
-// Display Names with Starting Letter
-function searchStartingLetter() {
-  console.log("Search by Starting Letter");
+function bounce(ball){
+    if (ball.c == "red"){
+        gravity1 = -15;
+        ball.y += gravity1;
+    }
+    else if(ball.c == "blue"){
+        gravity2 = -15;
+        ball.y += gravity2;
+    }
 }
 
-// Display Names with a Specific Length
-function searchLength() {
-  console.log("Search by Name Length");
+cnv.addEventListener('click',(event) =>{
+    let rect = cnv.getBoundingClientRect();
+    let mouseX = event.clientX- rect.left;
+    let mouseY = event.clientY- rect.top;
+    for(let i = 0; i < 2; ++i){
+        if(dist(mouseX, mouseY, ballz[i].x, ballz[i].y) < 100){
+            bounce(ballz[i]);
+        }
+    }
+})
+
+function dist(x1, y1, x2, y2) {
+    return Math.hypot(x2 - x1, y2 - y1);
 }
