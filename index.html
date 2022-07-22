@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Baby Names Data</title>
+
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico" />
+    <link rel="stylesheet" href="style.css" />
+
+    <script defer src="main.js"></script>
+  </head>
+
+  <body>
+    <main>
+      <h1>Baby Names Data</h1>
+      <hr />
+
+      <p>
+        <select id="menu-select">
+          <option value="display-all">Display All</option>
+          <option value="gender">Search by Gender</option>
+          <option value="rank">Search by Rank</option>
+          <option value="starting-letter">Search by Starting Letter</option>
+          <option value="length">Search by Name Length</option>
+        </select>
+        <button id="go-btn">Go</button>
+      </p>
+      <p>Number of names found: <span id="name-count">-----</span></p>
+
+      <div id="container"></div>
+    </main>
+  </body>
+</html>
