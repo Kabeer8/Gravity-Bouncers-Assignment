@@ -78,12 +78,12 @@ function bounce(ball){
     }
 }
 
-cnv.addEventListener('click',(event) =>{
+cnv.addEventListener('mousedown',(event) =>{
     let rect = cnv.getBoundingClientRect();
     let mouseX = event.clientX- rect.left;
     let mouseY = event.clientY- rect.top;
     for(let i = 0; i < 2; ++i){
-        if(dist(mouseX, mouseY, ballz[i].x, ballz[i].y) < 100){
+        if(dist(mouseX, mouseY, ballz[i].x, ballz[i].y) <= 30){
             bounce(ballz[i]);
         }
     }
